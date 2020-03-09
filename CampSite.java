@@ -5,8 +5,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
-public abstract class
-CampSite implements Serializable {
+public abstract class CampSite implements Serializable {
+    //Serializable converts the state of an object int a byte stream. Deserialization reverses this.
+
+    // Version control for our class. If anything changes a new serialVersionUID will be used and
+    // trying to deserialize an older version will result in an error, I think.
     private static final long serialVersionUID = 1L;
 
     protected String guestName;

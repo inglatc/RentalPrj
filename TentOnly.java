@@ -15,6 +15,7 @@ public class TentOnly extends CampSite {
                     GregorianCalendar estimatedCheckOut,
                     GregorianCalendar actualCheckOut,
                     int numberOfTenters) {
+        //guestName, checkIn, estimatedCheckout, actualCheckout used for parent class CampSite
         super(guestName, checkIn, estimatedCheckOut, actualCheckOut);
         this.numberOfTenters = numberOfTenters;
     }
@@ -28,9 +29,14 @@ public class TentOnly extends CampSite {
     }
 
     @Override
-    public double getCost(GregorianCalendar checkOut) {
+    public double getCost(GregorianCalendar checkOut) { //Override of parent class CampSite
         double cost = 0;
-        return cost;
+        long days = (checkOut.getTimeInMillis() - this.checkIn.getTimeInMillis()) / (1000 * 60 *60 * 24);
+        if (this.numberOfTenters > 10) {
+            return 20 * days;
+        } else {
+            return 10 * days;
+        }
     }
 
     @Override

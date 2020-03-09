@@ -120,8 +120,10 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
         add(panel);
         scrollList.setPreferredSize(new Dimension(800,300));
 
+        pack();
         setVisible(true);
         setSize(950,450);
+        setLocationRelativeTo(null);
     }
 
     public void actionPerformed(ActionEvent e) {

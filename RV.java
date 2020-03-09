@@ -25,8 +25,13 @@ private int power;
 
     @Override
     public double getCost(GregorianCalendar checkOut) {
+        long days = (checkOut.getTimeInMillis() - this.checkIn.getTimeInMillis()) / (1000 * 60 * 60 * 24);
         double cost = 10;
-        return cost;
+        if (this.power > 1000) {
+            return (30 * days) + cost;
+        } else {
+            return (20 * days) + cost;
+        }
     }
 
     @Override
