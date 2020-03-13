@@ -223,7 +223,102 @@ public class ListModel extends AbstractTableModel {
             os.close();
         } catch (IOException ex) {
             throw new RuntimeException("Saving problem! " + display);
+        }
+    }
 
+    public void saveTextDatabase(String filename) {
+
+        // Code for saving the JTable to a .txt file sourced from
+        // https://stackoverflow.com/questions/43151376/exporting-jtable-to-txt-file
+
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filename));
+            PrintWriter fileWriter = new PrintWriter(bufferedWriter);
+
+            // Loop through each row of our JTable
+            for (int i = 0; i < getRowCount(); ++i) {
+
+                // If the object on this row is of type RV, print "RV" at the start of the line on the file
+                // in order to distinguish what type of object we need to create when the file is loaded. If it
+                // is not an RV, prints "Tent" instead so an object of type Tent can be created instead.
+                if (fileredListCampSites.get(i) instanceof RV) {
+                    fileWriter.print("RV");
+                } else {
+                    fileWriter.print("Tent");
+                }
+                // Tabs to separate items for increased readability in the file.
+                fileWriter.print("\t\t");
+
+                // Loop through each cell in the current row.
+                for (int j = 0; j < getColumnCount(); ++j) {
+                    // Gets the value of the current cell and stores it in a string.
+                    String s = getValueAt(i,j).toString();
+                    // Print the value to the text file
+                    fileWriter.print(s);
+                    // Tabs to separate this from the next item
+                    fileWriter.print("\t\t");
+                }
+                // After this row has been written to the file, go to the next line.
+                fileWriter.println("");
+            }
+
+            // Closes the fileWriter
+            fileWriter.close();
+
+        }catch(Exception ex) {
+            throw new RuntimeException("Saving problem! " + display);
+        }
+    }
+
+    public void loadTextDatabase(String filename) {
+        // new DateFormat
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        // Clears the currently displayed camp sites.
+        listCampSites.clear();
+
+        // Local variables for each column to be added back into the JTable after being read from file.
+        String guestName;
+        String cost;
+        GregorianCalendar checkIn;
+        GregorianCalendar estCheckOut;
+        int maxPowerTenters;
+
+        try {
+            // Scanner to read our text file
+            Scanner scnr = new Scanner(new File(filename));
+
+            // As long as there are new lines, continue reading the file
+            while (scnr.hasNextLine()) {
+
+                // New Scanner to read the each item in the current line
+                Scanner scnr2 = new Scanner(scnr.nextLine());
+
+                // Reads each word on the line and assigns them to corresponding value of the object.
+                String campType = scnr2.next();
+                guestName = scnr2.next();
+                cost = scnr2.next();
+                checkIn = new GregorianCalendar();
+                checkIn.setTime(df.parse(scnr2.next()));
+                estCheckOut = new GregorianCalendar();
+                estCheckOut.setTime(df.parse(scnr2.next()));
+                maxPowerTenters = Integer.parseInt(scnr2.next());
+
+                // If the first word of the line was RV, we know the entry should be of type RV, otherwise it should
+                // be a tent and adds a new object to the list of campsites accordingly.
+                if (campType.equals("RV")) {
+                    listCampSites.add(new RV(guestName, checkIn, estCheckOut, null, maxPowerTenters));
+                } else {
+                    listCampSites.add(new TentOnly(guestName, checkIn, estCheckOut, null, maxPowerTenters));
+                }
+            }
+
+            UpdateScreen();
+
+
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            throw new RuntimeException("Loading problem: " + display);
         }
     }
 
@@ -239,7 +334,6 @@ public class ListModel extends AbstractTableModel {
             is.close();
         } catch (Exception ex) {
             throw new RuntimeException("Loading problem: " + display);
-
         }
     }
 

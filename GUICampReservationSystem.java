@@ -140,8 +140,12 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
             int status = chooser.showOpenDialog(null);
             if (status == JFileChooser.APPROVE_OPTION) {
                 String filename = chooser.getSelectedFile().getAbsolutePath();
-                if (openSerItem == comp)
+                if (openSerItem == comp) {
                     DList.loadDatabase(filename);
+                }
+                if (openTextItem == comp) {
+                    DList.loadTextDatabase(filename);
+                }
             }
         }
 
@@ -150,8 +154,15 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
             int status = chooser.showSaveDialog(null);
             if (status == JFileChooser.APPROVE_OPTION) {
                 String filename = chooser.getSelectedFile().getAbsolutePath();
-                if (saveSerItem == e.getSource())
+                if (saveSerItem == e.getSource()) {
                     DList.saveDatabase(filename);
+                }
+                if (saveTextItem == e.getSource()) {
+                    filename = filename + ".txt";
+                    DList.saveTextDatabase(filename);
+                }
+
+
             }
         }
 

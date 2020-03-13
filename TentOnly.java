@@ -31,7 +31,7 @@ public class TentOnly extends CampSite {
     @Override
     public double getCost(GregorianCalendar checkOut) { //Override of parent class CampSite
         double cost = 0;
-        long days = (checkOut.getTimeInMillis() - this.checkIn.getTimeInMillis()) / (1000 * 60 *60 * 24);
+        long days = (checkOut.getTimeInMillis() - this.checkIn.getTimeInMillis()) / (1000 * 60 * 60 * 24);
         if (this.numberOfTenters > 10) {
             return 20 * days;
         } else {
