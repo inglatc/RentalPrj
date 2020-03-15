@@ -135,6 +135,17 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
         if (checkOUtItemScn == comp)
             DList.setDisplay(ScreenDisplay.CheckOutGuest);
 
+        if (sortRvTentItemScn == comp) {
+            DList.sortRVTent();
+            DList.fireTableDataChanged();
+
+        }
+
+        if (sortTentRvItemScn == comp) {
+            DList.sortTentRV();
+            DList.fireTableDataChanged();
+        }
+
         if (openSerItem == comp || openTextItem == comp) {
             JFileChooser chooser = new JFileChooser();
             int status = chooser.showOpenDialog(null);

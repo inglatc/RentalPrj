@@ -403,24 +403,34 @@ public class ListModel extends AbstractTableModel {
             g6.setTime(d6);
 
             // Create Tent sites with using the newly generated dates for the check in/check out times
-            TentOnly tentOnly1 = new TentOnly("T1", g3, g2,null,4);
-            TentOnly tentOnly11 = new TentOnly("T1", g3,g1, null, 8);
-            TentOnly tentOnly111 = new TentOnly("T1", g5,g3, null, 8);
-            TentOnly tentOnly2 = new TentOnly("T2", g5, g3,null, 5);
-            TentOnly tentOnly3 = new TentOnly("T3", g3, g1, g1,7);
+            TentOnly tentOnly1 = new TentOnly("Amanda", g3, g2,null,4);
+            TentOnly tentOnly11 = new TentOnly("Adam", g3,g1, null, 8);
+            TentOnly tentOnly111 = new TentOnly("Bob", g5,g3, null, 8);
+            TentOnly tentOnly1111 = new TentOnly("Amanda", g3, g3,null,77);
+            TentOnly tentOnly2 = new TentOnly("Vern", g5, g3,null, 1);
+            TentOnly tentOnly3 = new TentOnly("B3", g3, g1, g1,7);
+            TentOnly tentOnly4 = new TentOnly("Vern", g5, g2,null, 5);
+            TentOnly tentOnly5 = new TentOnly("Vern", g5, g6,null, 4);
+            TentOnly tentOnly6 = new TentOnly("Vern", g5, g1,null, 2);
+            TentOnly tentOnly7 = new TentOnly("Vern", g5, g4,null, 3);
 
             // Create RV sites with using the newly generated dates for the check in/check out times
-            RV RV1 = new RV("RV1",g4,g6,null, 1000);
-            RV RV2 = new RV("RV2",g5,g3,null, 1000);
-            RV RV22 = new RV("RV2", g3,g1,null, 2000);
-            RV RV222 = new RV("RV2", g3,g6,null, 2000);
-            RV RV3 = new RV("RV3",g5,g4,g3, 1000);
+            RV RV1 = new RV("Zach",g4,g6,null, 1000);
+            RV RV2 = new RV("Tim",g5,g3,null, 1000);
+            RV RV22 = new RV("Sharon", g3,g1,null, 2000);
+            RV RV222 = new RV("Becky", g3,g6,null, 2000);
+            RV RV3 = new RV("Amanda",g5,g4,g3, 1000);
 
             add(tentOnly1);
             add(tentOnly2);
             add(tentOnly3);
             add(tentOnly11);
             add(tentOnly111);
+            add(tentOnly1111);
+            add(tentOnly4);
+            add(tentOnly5);
+            add(tentOnly6);
+            add(tentOnly7);
 
             add(RV1);
             add(RV2);
@@ -438,6 +448,31 @@ public class ListModel extends AbstractTableModel {
         for (int i = 0; i < getRowCount(); i++) {
             fileredListCampSites.get(i).setDaysOverdue(date);
         }
+    }
+
+    public void sortRVTent() {
+
+        Collections.sort(fileredListCampSites, Comparator.comparing(e -> e instanceof TentOnly));
+
+        //fileredListCampSites = (ArrayList<CampSite>) fileredListCampSites.stream().sorted((n1, n2) -> n1.getGuestName().compareTo(n2.guestName)).collect(Collectors.toList());
+    }
+
+    public void sortTentRV() {
+
+        GregorianCalendar now = new GregorianCalendar();
+
+        Collections.sort(fileredListCampSites, new Comparator<CampSite>() {
+            @Override
+            public int compare(CampSite n1, CampSite n2) {
+                if (n1.getGuestName().equals(n2.guestName)) {
+                    return n1.getEstimatedCheckOut().compareTo(n2.estimatedCheckOut);
+                } else {
+                    return n1.getGuestName().compareTo(n2.guestName);
+                }
+            }
+        });
+        Collections.sort(fileredListCampSites, Comparator.comparing(e -> e instanceof RV));
+
     }
 }
 
