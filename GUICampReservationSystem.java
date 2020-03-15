@@ -166,6 +166,15 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
             }
         }
 
+        if (e.getSource() == overDueItemScn) {
+            OverdueDateDialog dialog = new OverdueDateDialog(this);
+            if (dialog.getCloseStatus() == OverdueDateDialog.OK) {
+                DList.setAllOverdueDays(dialog.getReturnDate());
+            }
+
+            DList.setDisplay(ScreenDisplay.OverdueGuests);
+        }
+
         //MenuBar options
         if(e.getSource() == exitItem){
             System.exit(1);

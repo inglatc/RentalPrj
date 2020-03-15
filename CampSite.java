@@ -16,6 +16,7 @@ public abstract class CampSite implements Serializable {
     protected GregorianCalendar checkIn;
     protected GregorianCalendar estimatedCheckOut;
     protected GregorianCalendar actualCheckOut;
+    protected int daysOverdue;
 
     public CampSite() {
     }
@@ -30,8 +31,22 @@ public abstract class CampSite implements Serializable {
         this.checkIn = checkIn;
         this.estimatedCheckOut = estimatedCheckOut;
         this.actualCheckOut = actualCheckOut;
+        this.daysOverdue = 0;
     }
 
+    public int getDaysOverdue() {
+        return this.daysOverdue;
+    }
+
+    public void setDaysOverdue(GregorianCalendar date) {
+        long days = (date.getTimeInMillis() - this.estimatedCheckOut.getTimeInMillis()) / (1000 * 60 * 60 * 24);
+
+        if (days <= 0) {
+            this.daysOverdue = 0;
+        } else {
+            this.daysOverdue = (int) days;
+        }
+    }
     public String getGuestName() {
         return guestName;
     }

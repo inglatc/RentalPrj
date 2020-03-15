@@ -27,6 +27,8 @@ public class ListModel extends AbstractTableModel {
     private String[] columnNamesforCheckouts = {"Guest Name", "Est. Cost",
             "Check in Date", "ACTUAL Check out Date ", " Real Cost"};
 
+    private String[] columnNamesForOverdue = {"Guest Name", "Est. Cost", "EST. Check Out Date", "Days Overdue"};
+
 
     private DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
     private String date;
@@ -77,7 +79,6 @@ public class ListModel extends AbstractTableModel {
                         filter(n -> n.getActualCheckOut() != null).collect(Collectors.toList());
 
                 // Note: This uses an anonymous class.
-                // Collections.sort(fileredListCampSites, (n1, n2) -> n1.getGuestName().compareTo(n2.guestName));
                 Collections.sort(fileredListCampSites, new Comparator<CampSite>() {
                     @Override
                     public int compare(CampSite n1, CampSite n2) {
@@ -85,7 +86,13 @@ public class ListModel extends AbstractTableModel {
                     }
                 });
                 break;
+            case OverdueGuests:
+                fileredListCampSites = (ArrayList<CampSite>) listCampSites.stream().
+                        filter(n -> n.actualCheckOut == null).collect(Collectors.toList());
 
+                Collections.sort(fileredListCampSites, Comparator.comparingInt(CampSite::getDaysOverdue));
+                Collections.reverse(fileredListCampSites);
+                break;
             default:
                 throw new RuntimeException("upDate is in undefined state: " + display);
         }
@@ -104,6 +111,8 @@ public class ListModel extends AbstractTableModel {
                 return columnNamesCurrentPark[col];
             case CheckOutGuest:
                 return columnNamesforCheckouts[col];
+            case OverdueGuests:
+                return columnNamesForOverdue[col];
         }
         throw new RuntimeException("Undefined state for Col Names: " + display);
     }
@@ -115,6 +124,8 @@ public class ListModel extends AbstractTableModel {
                 return columnNamesCurrentPark.length;
             case CheckOutGuest:
                 return columnNamesforCheckouts.length;
+            case OverdueGuests:
+                return columnNamesForOverdue.length;
         }
         throw new IllegalArgumentException();
     }
@@ -131,6 +142,8 @@ public class ListModel extends AbstractTableModel {
                 return currentParkScreen(row, col);
             case CheckOutGuest:
                 return checkOutScreen(row, col);
+            case OverdueGuests:
+                return overdueScreen(row, col);
           }
         throw new IllegalArgumentException();
     }
@@ -196,6 +209,29 @@ public class ListModel extends AbstractTableModel {
                         get(row).getCost(fileredListCampSites.get(row).
                         actualCheckOut
                 ));
+
+            default:
+                throw new RuntimeException("Row,col out of range: " + row + " " + col);
+        }
+    }
+
+    private Object overdueScreen(int row, int col) {
+        switch (col) {
+            case 0:
+                return (fileredListCampSites.get(row).guestName);
+
+            case 1:
+                return (fileredListCampSites.get(row).getCost(fileredListCampSites.get(row).estimatedCheckOut));
+
+            case 2:
+                if (fileredListCampSites.get(row).estimatedCheckOut == null)
+                    return "-";
+
+                return (formatter.format(fileredListCampSites.get(row).estimatedCheckOut.
+                        getTime()));
+
+            case 3:
+                return (fileredListCampSites.get(row).daysOverdue);
 
             default:
                 throw new RuntimeException("Row,col out of range: " + row + " " + col);
@@ -394,6 +430,13 @@ public class ListModel extends AbstractTableModel {
 
         } catch (ParseException e) {
             throw new RuntimeException("Error in testing, creation of list");
+        }
+    }
+
+    public void setAllOverdueDays(GregorianCalendar date) {
+
+        for (int i = 0; i < getRowCount(); i++) {
+            fileredListCampSites.get(i).setDaysOverdue(date);
         }
     }
 }
