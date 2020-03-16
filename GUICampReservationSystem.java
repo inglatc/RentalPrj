@@ -213,12 +213,15 @@ public class GUICampReservationSystem extends JFrame implements ActionListener{
                 CampSite unit = DList.get(index);
                 CheckOutOnDialog dialog = new CheckOutOnDialog(this, unit);
 
-                JOptionPane.showMessageDialog(null,
-                        "  Be sure to thank " + unit.getGuestName() +
-                        "\n for camping with us and the price is:  " +
-                        unit.getCost(unit.getActualCheckOut()) +
-                        " dollars");
-                DList.upDate(index, unit);
+                if (unit.getActualCheckOut() != null) {
+                    JOptionPane.showMessageDialog(null,
+                            "  Be sure to thank " + unit.getGuestName() +
+                                    "\n for camping with us and the price is:  " +
+                                    unit.getCost(unit.getActualCheckOut()) +
+                                    " dollars");
+                    DList.upDate(index, unit);
+                }
+
             }
         }
     }

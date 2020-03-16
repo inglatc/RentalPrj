@@ -111,13 +111,39 @@ public class ReservationRVDialog extends JDialog implements ActionListener {
                 d2 = df.parse(txtDateCheckout.getText());
                 gregTemp.setTime(d2);
                 rv.setEstimatedCheckOut(gregTemp);
+                if (txtGuestName.getText().equals("")) {
+                    throw new IllegalArgumentException();
+                }
+                rv.setGuestName(txtGuestName.getText());
+                if (Integer.parseInt(txtPowerSupplied.getText()) <= 0) {
+                    throw new NumberFormatException();
+                }
+                rv.setPower(Integer.parseInt(txtPowerSupplied.getText()));
 
             } catch (ParseException e1) {
-//                  Do some thing good, what I am not sure.
+                  JOptionPane.showMessageDialog(this,
+						"Error, Invalid Date Format",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
+                closeStatus = CANCEL;
+                return;
+            } catch (NumberFormatException e2) {
+                JOptionPane.showMessageDialog(this,
+                        "Error: Max Power must be a non-zero integer",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                closeStatus = CANCEL;
+                return;
+            } catch (IllegalArgumentException e3) {
+                JOptionPane.showMessageDialog(this,
+                        "Error: Fields must not be empty",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                closeStatus = CANCEL;
+                return;
             }
 
-            rv.setGuestName(txtGuestName.getText());
-            rv.setPower(Integer.parseInt(txtPowerSupplied.getText()));
+
         }
 
         // make the dialog disappear

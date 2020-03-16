@@ -78,6 +78,7 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 
 		// if OK clicked the fill the object
 		if (button == okButton) {
+
 			// save the information in the object
 			closeStatus = OK;
 			SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
@@ -87,11 +88,25 @@ public class CheckOutOnDialog extends JDialog implements ActionListener {
 			try {
 				d = df.parse(txtDate.getText());
 				gTemp.setTime(d);
+
+				if (gTemp.compareTo(campSite.getCheckIn()) <= 0) {
+					throw new InvalidCheckOutException();
+				}
 				campSite.setActualCheckOut(gTemp);
 
 			} catch (ParseException e1) {
+				JOptionPane.showMessageDialog(this,
+						"Error, Invalid Date Format",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			} catch (InvalidCheckOutException e2) {
+				JOptionPane.showMessageDialog(this,
+						"Error, Check out date must be after the date of check in",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
 			}
-
 		}
 
 		// make the dialog disappear
